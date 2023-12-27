@@ -1,0 +1,126 @@
+<body>
+  <div class="container">
+    <header class="container__header">Registro</header>
+    <form class="container__form" [formGroup]="form">
+      <div class="container__form__personal-information">
+        <span class="container__form__personal-information__title">Datos Personales</span>
+        <div class="container__form__personal-information__fields">
+          <div class="container__form__personal-information__fields__field">
+            <label class="container__form__personal-information__fields__field__label" for="">Nombre: </label>
+            <input class="container__form__personal-information__fields__field__input" type="text" id="name" name="name" formControlName="name" placeholder="Ingresa tu nombre">
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <label class="container__form__personal-information__fields__field__label" for="">Fecha de Nacimiento: </label>
+            <input class="container__form__personal-information__fields__field__input" type="date" id="date" name="date" formControlName="date" placeholder="Ingresa tu fecha de nacimiento">
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <label class="container__form__personal-information__fields__field__label" for="">Celular: </label>
+            <input class="container__form__personal-information__fields__field__input" type="number" id="number" name="number" formControlName="number" placeholder="Ingresa tu número de celular" pattern="^([0-9]{1,10})$">
+          </div>
+
+          <div class="container__form__personal-information__fields__field">
+            <p class="alert alert-danger" *ngIf="getName?.hasError('required') && (getName?.dirty || getName?.touched)">El campo es requerido</p>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <p class="alert alert-danger" *ngIf="getDate?.hasError('required') && (getDate?.dirty || getDate?.touched)">El campo es requerido</p>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <p class="alert alert-danger" *ngIf="getNumber?.hasError('required') && (getNumber?.dirty || getNumber?.touched)">El campo es requerido</p>
+            <p class="alert alert-danger" *ngIf="getNumber?.hasError('pattern') && (getNumber?.dirty || getNumber?.touched)">El campo no es un celular</p>
+          </div>
+
+          <div class="container__form__personal-information__fields__field">
+            <label class="container__form__personal-information__fields__field__label" for="">Correo Electronico: </label>
+            <input class="container__form__personal-information__fields__field__input" type="email" id="email" name="email" formControlName="email" placeholder="Ingresa tu correo electronico">
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <label class="container__form__personal-information__fields__field__label" for="">Pais: </label>
+            <select class="container__form__personal-information__fields__field__input" id="country" name="conuntry" formControlName="country">
+              <option value="">Selecciona tu país</option>
+              <option [value]="country.name" *ngFor="let country of countries">{{ country.name }}</option>
+            </select>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <label class="container__form__personal-information__fields__field__label" for="">Contraseña: </label>
+            <input class="container__form__personal-information__fields__field__input" type="password" id="password" name="password" formControlName="password" placeholder="Ingresa tu contraseña">
+          </div>
+
+          <div class="container__form__personal-information__fields__field">
+            <p class="alert alert-danger" *ngIf="getEmail?.hasError('required') && (getEmail?.dirty || getEmail?.touched)">El campo es requerido</p>
+            <p class="alert alert-danger" *ngIf="getEmail?.hasError('email') && (getEmail?.dirty || getEmail?.touched)">El campo no es un email</p>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <p class="alert alert-danger" *ngIf="getCountry?.hasError('required') && (getCountry?.dirty || getCountry?.touched)">El campo es requerido</p>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <p class="alert alert-danger" *ngIf="getPassword?.hasError('required') && (getPassword?.dirty || getPassword?.touched)">El campo es requerido</p>
+          </div>
+        </div>
+
+        <div class="container__form__personal-information__fields">
+          <div class="container__form__personal-information__fields__field">
+            <button class="container__form__personal-information__recovery-data" (click)="recoveryData()">
+              <i class="container__form__personal-information__recovery-data__icon uil uil-plus"></i>
+              <span>Recuperación</span>
+            </button>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <button class="container__form__personal-information__save-data" (click)="saveData()" [disabled]="form.invalid">
+              <i class="container__form__personal-information__save-data__icon uil uil-cloud-upload"></i>
+              <span>Guadar</span>
+            </button>
+          </div>
+          <div class="container__form__personal-information__fields__field">
+            <button class="container__form__personal-information__clean-data" (click)="resetData()">
+              <i class="container__form__personal-information__clean-data__icon uil uil-file-blank"></i>
+              <span>Limpiar</span>
+            </button>
+          </div>
+        </div>
+
+        <div formArrayName="recoveryData">
+          <div *ngFor="let item of getRecoveryData.controls; let i = index" [formGroupName]="i">
+            <div class="container__form__personal-information__fields">
+              <div class="container__form__personal-information__fields__field">
+                <label class="container__form__personal-information__fields__field__label" for="">Pregunta de Seguridad: </label>
+                <select class="container__form__personal-information__fields__field__input" id="question-{{ i }}" name="question" formControlName="question">
+                  <option [value]="question" *ngFor="let question of questions">{{ question }}</option>
+                </select>
+              </div>
+              <div class="container__form__personal-information__fields__field">
+                <label class="container__form__personal-information__fields__field__label" for="">Respuesta: </label>
+                <input class="container__form__personal-information__fields__field__input" type="text" id="answer-{{ i }}" name="answer" formControlName="answer" placeholder="Ingresa tu respuesta">
+              </div>
+              <div class="container__form__personal-information__fields__field">
+                <button class="container__form__personal-information__clean-data" (click)="removeRow(i)">
+                  <i class="container__form__personal-information__clean-data__icon uil uil-trash"></i>
+                  <span>Eliminar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="save">
+          <table class="table">
+            <tr>
+              <td class="container__form__personal-information__fields__field__label">Nombre</td>
+              <td class="container__form__personal-information__fields__field__label">Fecha de Nacimiento</td>
+              <td class="container__form__personal-information__fields__field__label">Celular</td>
+              <td class="container__form__personal-information__fields__field__label">Correo Electronico</td>
+              <td class="container__form__personal-information__fields__field__label">País</td>
+            </tr>
+            <tr>
+              <td class="container__form__personal-information__fields__field__label">{{ submitData.name }}</td>
+              <td class="container__form__personal-information__fields__field__label">{{ submitData.date }}</td>
+              <td class="container__form__personal-information__fields__field__label">{{ submitData.number }}</td>
+              <td class="container__form__personal-information__fields__field__label">{{ submitData.email }}</td>
+              <td class="container__form__personal-information__fields__field__label">{{ submitData.country }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+<router-outlet></router-outlet>
